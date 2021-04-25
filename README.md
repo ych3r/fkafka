@@ -1,7 +1,7 @@
 # fkafka
 fkafka is used to deal with massive amount of log data from kafka.
 
-Before putting the guid info into the nebular, we need a script to help us to find what is important.
+Before putting the guid info into the nebular, we need a script to help us find what is important.
 
 So I wrote this script.
 
