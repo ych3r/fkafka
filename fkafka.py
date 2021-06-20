@@ -50,6 +50,14 @@ def deal_with_list(list):
             pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
             pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
             event = "父进程【" + ppname + "(" + ppguid + ")" + "】创建了子进程【" + pname + "(" + pguid + ")】"
+
+        if "process_access" in single_event:
+            #  pname -> dst_pname
+            pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
+            pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
+            dst_pname = re.search(r'"dst_pname":"(.*?)".*', list[i], re.M|re.I).group(1)
+            dst_pguid = re.search(r'"dst_pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
+            event = "进程【" + pname + "(" + pguid + ")" + "】访问了进程【" + dst_pname + "(" + dst_pguid + ")】"
             
         if "net_connect" in single_event:
             # src_ip -> dst_ip
