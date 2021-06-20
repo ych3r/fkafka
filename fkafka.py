@@ -36,6 +36,7 @@ def deal_with_list(list):
         single_event = list[i]
         # get real time
         real_time = re.search(r'"unified_time":(.*?),.*', list[i]).group(1)
+        agent_ip = re.search(r'"agent_ip":(.*?),.*', list[i]).group(1)
 
         # initialize event variable
         event = 0
@@ -152,8 +153,9 @@ def deal_with_list(list):
             continue
         elif event != 0 and "md5" not in single_event:
             md5 = ""
+        ###############################################################################################
         # add them to new list
-        new_list.append([real_time, md5, event])
+        new_list.append([real_time, agent_ip, event])
     return new_list
 
 def sort_by_time(unsorted_list):
@@ -177,13 +179,17 @@ def main():
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
     parser.add_option("-f", "--file", type = "string", dest = "filename", help = "read kafka data from FILENAME")
-    parser.add_option("-t", "--time", action = "store_true", dest = "time", help = "display time")
-    parser.add_option("-m", "--md5", action = "store_true", dest = "md5", help = "display md5")
+    #parser.add_option("-t", "--time", action = "store_true", dest = "time", help = "display time")
+    #parser.add_option("-a", "--agent", action = "store_true", dest = "agent", help = "display agent ip")
+    #parser.add_option("-m", "--md5", action = "store_true", dest = "md5", help = "display md5")
+    parser.add_option("-a", "--all", action = "store_true", dest = "adv", help = "display all")
     
     (options, args) = parser.parse_args()
     file = options.filename
-    time = options.time
-    md5 = options.md5
+    #time = options.time
+    #agent = options.agent
+    #md5 = options.md5
+    adv = options.adv
 
     if file != None:
         events_list = deal_with_list(data_to_list(file))
@@ -200,15 +206,9 @@ def main():
                                 --- Created by liuyc.
 
             ''')
-        if (time == True and md5 == True):
+        if (adv == True):
             for i in sorted_list:
                 print(i[0], i[1], i[2])
-        elif (time == True and md5 == None):
-            for i in sorted_list:
-                print(i[0], i[2])
-        elif (time == None and md5 == True):
-            for i in sorted_list:
-                print(i[1], i[2])
         else:
             for i in sorted_list:
                 print(i[2])
