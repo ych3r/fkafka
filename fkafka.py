@@ -70,6 +70,13 @@ def deal_with_list(list):
             pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
             event = "进程【" + pname + "(" + pguid + ")" + "】从【" + src_ip + ":" + src_port + "】网络连接到【" + dst_ip + ":" + dst_port + "】"
 
+        if "dns_access" in single_event:
+            # pname -> dns_domain
+            pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
+            pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
+            dns_domain = re.search(r'"dns_domain":"(.*?)".*', list[i], re.M|re.I).group(1)
+            event = "进程【" + pname + "(" + pguid + ")" + "】DNS 访问了【" + dns_domain + "】"
+
         # if "login" in single_event:
         #     # src_ip
         #     pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
@@ -107,6 +114,14 @@ def deal_with_list(list):
             pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
             script_path = re.search(r'"script_path":"(.*?)",.*', list[i], re.M|re.I).group(1)
             event = "【" + pname + "(" + pguid + ")" + "】引用了脚本【" + script_path + "】"
+
+        if "cmd_input" in single_event:
+            # pname - context
+            pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
+            pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
+            context = re.search(r'"context":"(.*?)",.*', list[i], re.M|re.I).group(1)
+            event = "在【" + pname + "(" + pguid + ")" + "】输入【" + context + "】"
+            
             
         if "named_pipe_create" in single_event:
             # pname - pipe_name
@@ -208,7 +223,10 @@ def main():
             ''')
         if (adv == True):
             for i in sorted_list:
-                print(i[0], i[1], i[2])
+                if "输入" in i[2]:
+                    print("\n\n\n" + i[0], i[1], i[2])
+                else:
+                    print(i[0], i[1], i[2])
         else:
             for i in sorted_list:
                 print(i[2])
