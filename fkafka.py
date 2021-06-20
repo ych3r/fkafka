@@ -57,7 +57,9 @@ def deal_with_list(list):
             src_port = re.search(r'"src_port":(.*?),.*', list[i], re.M|re.I).group(1)
             dst_ip = re.search(r'"dst_ip":"(.*?)".*', list[i], re.M|re.I).group(1)
             dst_port = re.search(r'"dst_port":(.*?),.*', list[i], re.M|re.I).group(1)
-            event = "从【" + src_ip + ":" + src_port + "】网络连接到【" + dst_ip + ":" + dst_port + "】"
+            pname = re.search(r'"pname":"(.*?)".*', list[i], re.M|re.I).group(1)
+            pguid = re.search(r'"pguid":"(.*?)".*', list[i], re.M|re.I).group(1)
+            event = "进程【" + pname + "(" + pguid + ")" + "】从【" + src_ip + ":" + src_port + "】网络连接到【" + dst_ip + ":" + dst_port + "】"
 
         # if "login" in single_event:
         #     # src_ip
