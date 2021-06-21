@@ -9,6 +9,5 @@ So I wrote this script.
 python fkafka.py -f <your log file>
 
 -f: input file
--t: display time
--m: display md5 value
+-a: display all information
 ```
